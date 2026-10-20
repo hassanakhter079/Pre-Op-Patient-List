@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pre-Op Patient List — General Surgery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page { size: A4 landscape; margin: 0; }
+
+  html, body {
+    background: #d9dde3;
+    font-family: 'IBM Plex Sans', Arial, sans-serif;
+    color: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── A4 LANDSCAPE SHEET ── */
+  .sheet {
+    width: 297mm;
+    height: 209mm;
+    margin: 12px auto;
+    padding: 7mm 8mm;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    flex: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #000;
+    padding-bottom: 3mm;
+    margin-bottom: 3mm;
+  }
+  .title h1 { font-size: 20px; font-weight: 700; letter-spacing: .3px; }
+  .title p  { font-size: 11px; font-weight: 500; margin-top: 2px; }
+
+  .doctor {
+    flex: 1;
+    text-align: center;
+    font-family: 'Great Vibes', 'Snell Roundhand', 'Apple Chancery', 'Brush Script MT', cursive;
+    font-size: 44px;
+    line-height: 1;
+    padding: 0 6mm;
+  }
+
+  .date { display: flex; align-items: flex-end; gap: 6px; font-size: 11px; font-weight: 600; }
+  .date i { display: inline-block; width: 38mm; height: 14px; border-bottom: 1.5px solid #000; }
+
+  /* ── TABLE (stretches to fill the sheet) ── */
+  .table-wrap { flex: 1; min-height: 0; }
+
+  table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 2px solid #000;
+  }
+
+  /* 14 columns */
+  .c-no       { width: 2.5%; }
+  .c-name     { width: 13%; }
+  .c-cbc      { width: 5.5%; }
+  .c-baseline { width: 7%; }
+  .c-ptaptt   { width: 6.5%; }
+  .c-viral    { width: 7%; }
+  .c-cxr      { width: 5.5%; }
+  .c-ecg      { width: 5.5%; }
+  .c-bg       { width: 5%; }
+  .c-blood    { width: 5.5%; }
+  .c-consent  { width: 6%; }
+  .c-npo      { width: 6%; }
+  .c-dx       { width: 12.5%; }
+  .c-remarks  { width: 12.5%; }
+
+  thead th {
+    background: #e3e7ec;
+    border: 1.2px solid #000;
+    font-weight: 700;
+    text-align: center;
+  }
+  tr.subhead th   { font-size: 9.5px; height: 6mm; padding: 1px; background: #cfd5dc; }
+  tr.collabels th { font-size: 9px; height: 11mm; padding: 2px; line-height: 1.2; }
+
+  tbody td {
+    border: 1.2px solid #000;
+    height: 9mm;
+    padding: 2px 4px;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #fff;
+  }
+  tbody tr:nth-child(even) td { background-color: #f1f3f6; }
+
+  td.rownum { font-weight: 700; background-color: #dde1e6 !important; }
+  td.txt    { text-align: left; }
+
+  /* ── LEGEND + FOOTER ── */
+  .legend {
+    flex: none;
+    margin-top: 3mm;
+    padding-top: 2mm;
+    border-top: 1.2px solid #000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px 14px;
+    font-size: 8.5px;
+  }
+  .legend strong { font-weight: 700; }
+
+  .footer {
+    flex: none;
+    margin-top: 3mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .ln { display: inline-block; width: 55mm; height: 11px; border-bottom: 1px solid #000; vertical-align: bottom; }
+  .ln.short { width: 28mm; }
+
+  .print-btn {
+    position: fixed;
+    top: 10px;
+    right: 14px;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 100;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    html, body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save PDF</button>
+
+<div class="sheet">
+
+  <div class="header">
+    <div class="title">
+      <h1>Pre-Operative Patient List</h1>
+      <p>General Surgery — Government Hospital</p>
+    </div>
+    <div class="doctor">Dr. Hassan Akhtar</div>
+    <div class="date">Date <i></i></div>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+    <colgroup>
+      <col class="c-no"><col class="c-name">
+      <col class="c-cbc"><col class="c-baseline"><col class="c-ptaptt"><col class="c-viral"><col class="c-cxr"><col class="c-ecg"><col class="c-bg"><col class="c-blood">
+      <col class="c-consent"><col class="c-npo">
+      <col class="c-dx"><col class="c-remarks">
+    </colgroup>
+
+    <thead>
+      <tr class="subhead">
+        <th colspan="2">Patient</th>
+        <th colspan="8">Investigations</th>
+        <th colspan="2">Pre-op Clearance</th>
+        <th colspan="2">Clinical</th>
+      </tr>
+      <tr class="collabels">
+        <th>#</th>
+        <th>Patient Name</th>
+        <th>CBC</th>
+        <th>Baseline Labs (RFT / LFT / RBS)</th>
+        <th>PT / APTT / INR</th>
+        <th>Viral Markers (HBsAg / HCV / HIV)</th>
+        <th>CXR</th>
+        <th>ECG</th>
+        <th>Blood Group</th>
+        <th>Blood Avail.</th>
+        <th>Consent Signed</th>
+        <th>NPO Since</th>
+        <th>Diagnosis</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr><td class="rownum">1</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">2</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">3</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">4</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">5</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">6</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">7</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">8</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">9</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">10</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">11</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+      <tr><td class="rownum">12</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="legend">
+    <div><strong>CBC</strong> — Complete blood count</div>
+    <div><strong>Baseline Labs</strong> — RFT / LFT / RBS (write values or ✓ WNL)</div>
+    <div><strong>PT/APTT/INR</strong> — Coagulation profile</div>
+    <div><strong>Viral Markers</strong> — HBsAg, Anti-HCV, HIV (✓ if done/clear)</div>
+    <div><strong>CXR / ECG</strong> — ✓ done, or write the finding if abnormal</div>
+    <div><strong>Blood Avail.</strong> — Units reserved / crossmatched</div>
+    <div><strong>Consent</strong> — ✓ Signed / ✗ Pending</div>
+    <div><strong>NPO Since</strong> — Time of last oral intake</div>
+  </div>
+
+  <div class="footer">
+    <span>Prepared by: <i class="ln"></i></span>
+    <span>Checked by: <i class="ln"></i></span>
+    <span>List finalized: <i class="ln short"></i> hrs</span>
+  </div>
+
+</div>
+
+</body>
+</html>
