@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pre-Op Patient List — General Surgery</title>
+<script src="https://hassanakhter079.github.io/After-Salah-Zikr/cloud-sync.js" data-app="pre-op-pt-list"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
@@ -471,6 +472,7 @@
   });
 
   loadState();
+  window.addEventListener('cloud-sync-applied', loadState);
 </script>
 
 </body>
