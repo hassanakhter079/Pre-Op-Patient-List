@@ -19,12 +19,70 @@
     print-color-adjust: exact;
   }
 
+  /* ── TOP TOOLBAR (Screen Only) ── */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #1e242b;
+    color: #fff;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    font-size: 12px;
+  }
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .toolbar-tip {
+    color: #9ba5b0;
+    font-size: 11px;
+  }
+  .toolbar-tip kbd {
+    background: #323b46;
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 10px;
+  }
+  .toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn {
+    background: #323b46;
+    color: #fff;
+    border: 1px solid #485362;
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: #434f5e; }
+  .btn-danger:hover { background: #b91c1c; border-color: #dc2626; }
+  .btn-primary {
+    background: #2563eb;
+    border-color: #3b82f6;
+  }
+  .btn-primary:hover { background: #1d4ed8; }
+
   /* ── A4 LANDSCAPE SHEET ── */
   .sheet {
     width: 297mm;
     height: 209mm;
-    margin: 12px auto;
-    padding: 7mm 8mm;
+    margin: 14px auto;
+    padding: 6.5mm 8mm;
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -39,23 +97,43 @@
     align-items: flex-end;
     justify-content: space-between;
     border-bottom: 2.5px solid #000;
-    padding-bottom: 3mm;
-    margin-bottom: 3mm;
+    padding-bottom: 2.5mm;
+    margin-bottom: 2.5mm;
   }
-  .title h1 { font-size: 20px; font-weight: 700; letter-spacing: .3px; }
-  .title p  { font-size: 11px; font-weight: 500; margin-top: 2px; }
+  .title h1 { font-size: 20px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; }
+  .title p  { font-size: 11px; font-weight: 600; margin-top: 2px; color: #222; }
 
   .doctor {
     flex: 1;
     text-align: center;
     font-family: 'Great Vibes', 'Snell Roundhand', 'Apple Chancery', 'Brush Script MT', cursive;
-    font-size: 44px;
+    font-size: 42px;
     line-height: 1;
     padding: 0 6mm;
   }
 
-  .date { display: flex; align-items: flex-end; gap: 6px; font-size: 11px; font-weight: 600; }
-  .date i { display: inline-block; width: 38mm; height: 14px; border-bottom: 1.5px solid #000; }
+  .meta-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .field-line {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+  }
+  .field-line .line-box {
+    display: inline-block;
+    min-width: 36mm;
+    min-height: 14px;
+    border-bottom: 1.5px solid #000;
+    text-align: center;
+    font-weight: 600;
+    padding: 0 2px;
+  }
 
   /* ── TABLE (stretches to fill the sheet) ── */
   .table-wrap { flex: 1; min-height: 0; }
@@ -68,21 +146,23 @@
     border: 2px solid #000;
   }
 
-  /* 14 columns */
-  .c-no       { width: 2.5%; }
-  .c-name     { width: 13%; }
-  .c-cbc      { width: 5.5%; }
-  .c-baseline { width: 7%; }
-  .c-ptaptt   { width: 6.5%; }
-  .c-viral    { width: 7%; }
-  .c-cxr      { width: 5.5%; }
-  .c-ecg      { width: 5.5%; }
-  .c-bg       { width: 5%; }
-  .c-blood    { width: 5.5%; }
-  .c-consent  { width: 6%; }
-  .c-npo      { width: 6%; }
-  .c-dx       { width: 12.5%; }
-  .c-remarks  { width: 12.5%; }
+  /* 16 Columns (Balanced for A4 Landscape) */
+  .c-no       { width: 2.2%; }
+  .c-name     { width: 11.8%; }
+  .c-bed      { width: 4.5%; }
+  .c-cbc      { width: 5.0%; }
+  .c-baseline { width: 6.5%; }
+  .c-ptaptt   { width: 5.5%; }
+  .c-viral    { width: 6.0%; }
+  .c-cxr      { width: 4.5%; }
+  .c-ecg      { width: 4.5%; }
+  .c-bg       { width: 4.2%; }
+  .c-blood    { width: 4.8%; }
+  .c-pac      { width: 5.5%; }
+  .c-consent  { width: 5.0%; }
+  .c-npo      { width: 5.0%; }
+  .c-dx       { width: 13.5%; }
+  .c-remarks  { width: 11.5%; }
 
   thead th {
     background: #e3e7ec;
@@ -90,157 +170,308 @@
     font-weight: 700;
     text-align: center;
   }
-  tr.subhead th   { font-size: 9.5px; height: 6mm; padding: 1px; background: #cfd5dc; }
-  tr.collabels th { font-size: 9px; height: 11mm; padding: 2px; line-height: 1.2; }
+  tr.subhead th {
+    font-size: 9.5px;
+    height: 5.5mm;
+    padding: 1px;
+    background: #cfd5dc;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  tr.collabels th {
+    font-size: 8.5px;
+    height: 10.5mm;
+    padding: 2px;
+    line-height: 1.15;
+  }
+  tr.collabels th span.sub {
+    display: block;
+    font-size: 7.5px;
+    font-weight: 500;
+    margin-top: 1px;
+  }
 
   tbody td {
     border: 1.2px solid #000;
-    height: 9mm;
-    padding: 2px 4px;
-    font-size: 11px;
+    padding: 2px 3px;
+    font-size: 10.5px;
     font-weight: 500;
     text-align: center;
     vertical-align: middle;
     background-color: #fff;
+    overflow: hidden;
+    word-wrap: break-word;
   }
-  tbody tr:nth-child(even) td { background-color: #f1f3f6; }
+  tbody tr:nth-child(even) td { background-color: #f4f6f8; }
 
-  td.rownum { font-weight: 700; background-color: #dde1e6 !important; }
-  td.txt    { text-align: left; }
+  td.rownum {
+    font-weight: 700;
+    font-size: 10px;
+    background-color: #dde1e6 !important;
+    user-select: none;
+  }
+  td.txt { text-align: left; }
+
+  /* Subtle focus highlight when typing on screen */
+  [contenteditable="true"]:focus {
+    outline: 2px solid #2563eb;
+    background-color: #eff6ff !important;
+  }
 
   /* ── LEGEND + FOOTER ── */
   .legend {
     flex: none;
-    margin-top: 3mm;
-    padding-top: 2mm;
+    margin-top: 2.5mm;
+    padding-top: 1.8mm;
     border-top: 1.2px solid #000;
     display: flex;
     flex-wrap: wrap;
-    gap: 1px 14px;
-    font-size: 8.5px;
+    justify-content: space-between;
+    gap: 1px 10px;
+    font-size: 8px;
   }
   .legend strong { font-weight: 700; }
 
   .footer {
     flex: none;
-    margin-top: 3mm;
+    margin-top: 2.5mm;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     font-size: 10px;
     font-weight: 600;
   }
-  .ln { display: inline-block; width: 55mm; height: 11px; border-bottom: 1px solid #000; vertical-align: bottom; }
-  .ln.short { width: 28mm; }
-
-  .print-btn {
-    position: fixed;
-    top: 10px;
-    right: 14px;
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 4px;
-    z-index: 100;
+  .ln {
+    display: inline-block;
+    min-width: 50mm;
+    min-height: 12px;
+    border-bottom: 1.2px solid #000;
+    vertical-align: bottom;
+    padding: 0 3px;
   }
+  .ln.short { min-width: 26mm; text-align: center; }
 
   /* ── PRINT ── */
   @media print {
     html, body { background: #fff; }
     .sheet { margin: 0; box-shadow: none; }
     .no-print { display: none !important; }
+    [contenteditable="true"]:focus { outline: none; background-color: transparent !important; }
   }
 </style>
 </head>
 <body>
 
-<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save PDF</button>
+<!-- Interactive Screen Toolbar (Hidden when printing) -->
+<div class="toolbar no-print">
+  <div class="toolbar-left">
+    <strong>📋 Pre-Op List Editor</strong>
+    <span class="toolbar-tip">
+      <kbd>Click</kbd> any cell or line to type &nbsp;|&nbsp; <kbd>Double-Click</kbd> lab/clearance cells to cycle <strong>✓ / WNL / Pending / ✗</strong>
+    </span>
+  </div>
+  <div class="toolbar-actions">
+    <button class="btn" onclick="addRow()" title="Add a patient row">+ Row</button>
+    <button class="btn" onclick="removeRow()" title="Remove last row">− Row</button>
+    <button class="btn btn-danger" onclick="clearTable()" title="Clear all typed text for a blank printout">Clear Form</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+</div>
 
-<div class="sheet">
+<div class="sheet" id="sheet">
 
   <div class="header">
     <div class="title">
-      <h1>Pre-Operative Patient List</h1>
-      <p>General Surgery — Government Hospital</p>
+      <h1 contenteditable="true" spellcheck="false">Pre-Operative Patient List</h1>
+      <p contenteditable="true" spellcheck="false">General Surgery — Government Hospital</p>
     </div>
-    <div class="doctor">Dr. Hassan Akhtar</div>
-    <div class="date">Date <i></i></div>
+    <div class="doctor" contenteditable="true" spellcheck="false">Dr. Hassan Akhtar</div>
+    <div class="meta-right">
+      <div class="field-line">OT Day / Ward <span class="line-box" contenteditable="true" spellcheck="false"></span></div>
+      <div class="field-line">Date <span class="line-box" contenteditable="true" spellcheck="false"></span></div>
+    </div>
   </div>
 
   <div class="table-wrap">
-  <table>
+  <table id="preop-table">
     <colgroup>
-      <col class="c-no"><col class="c-name">
+      <col class="c-no"><col class="c-name"><col class="c-bed">
       <col class="c-cbc"><col class="c-baseline"><col class="c-ptaptt"><col class="c-viral"><col class="c-cxr"><col class="c-ecg"><col class="c-bg"><col class="c-blood">
-      <col class="c-consent"><col class="c-npo">
+      <col class="c-pac"><col class="c-consent"><col class="c-npo">
       <col class="c-dx"><col class="c-remarks">
     </colgroup>
 
     <thead>
       <tr class="subhead">
-        <th colspan="2">Patient</th>
-        <th colspan="8">Investigations</th>
-        <th colspan="2">Pre-op Clearance</th>
-        <th colspan="2">Clinical</th>
+        <th colspan="3">Patient Identification</th>
+        <th colspan="8">Investigations &amp; Blood Bank</th>
+        <th colspan="3">Pre-Op Clearance</th>
+        <th colspan="2">Clinical Plan</th>
       </tr>
       <tr class="collabels">
         <th>#</th>
-        <th>Patient Name</th>
-        <th>CBC</th>
-        <th>Baseline Labs (RFT / LFT / RBS)</th>
-        <th>PT / APTT / INR</th>
-        <th>Viral Markers (HBsAg / HCV / HIV)</th>
+        <th>Patient Name<span class="sub">(Age / Sex)</span></th>
+        <th>Ward /<span class="sub">Bed #</span></th>
+        <th>CBC<span class="sub">(Hb/TLC/Plt)</span></th>
+        <th>Baseline Labs<span class="sub">(RFT/LFT/SE/RBS)</span></th>
+        <th>Coag. Profile<span class="sub">(PT/APTT/INR)</span></th>
+        <th>Viral Markers<span class="sub">(HBsAg/HCV/HIV)</span></th>
         <th>CXR</th>
         <th>ECG</th>
-        <th>Blood Group</th>
-        <th>Blood Avail.</th>
-        <th>Consent Signed</th>
-        <th>NPO Since</th>
-        <th>Diagnosis</th>
-        <th>Remarks</th>
+        <th>Blood<span class="sub">Group</span></th>
+        <th>Blood<span class="sub">Avail.</span></th>
+        <th>Anesthesia<span class="sub">Fitness (PAC)</span></th>
+        <th>Consent<span class="sub">&amp; Site</span></th>
+        <th>NPO<span class="sub">Since</span></th>
+        <th>Diagnosis &amp;<span class="sub">Planned Procedure</span></th>
+        <th>Remarks<span class="sub">(USG/Echo/Meds)</span></th>
       </tr>
     </thead>
 
-    <tbody>
-      <tr><td class="rownum">1</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">2</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">3</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">4</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">5</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">6</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">7</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">8</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">9</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">10</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">11</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
-      <tr><td class="rownum">12</td><td class="txt"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="txt"></td><td class="txt"></td></tr>
+    <tbody id="table-body">
+      <!-- Rows generated by JS (defaults to 12) -->
     </tbody>
   </table>
   </div>
 
   <div class="legend">
-    <div><strong>CBC</strong> — Complete blood count</div>
-    <div><strong>Baseline Labs</strong> — RFT / LFT / RBS (write values or ✓ WNL)</div>
-    <div><strong>PT/APTT/INR</strong> — Coagulation profile</div>
-    <div><strong>Viral Markers</strong> — HBsAg, Anti-HCV, HIV (✓ if done/clear)</div>
-    <div><strong>CXR / ECG</strong> — ✓ done, or write the finding if abnormal</div>
-    <div><strong>Blood Avail.</strong> — Units reserved / crossmatched</div>
-    <div><strong>Consent</strong> — ✓ Signed / ✗ Pending</div>
-    <div><strong>NPO Since</strong> — Time of last oral intake</div>
+    <div><strong>CBC:</strong> Hb / TLC / Platelets</div>
+    <div><strong>Baseline:</strong> RFT, LFT, S. Electrolytes, RBS (values or ✓ WNL)</div>
+    <div><strong>Viral:</strong> HBsAg, Anti-HCV, HIV</div>
+    <div><strong>CXR / ECG:</strong> ✓ Normal or note finding</div>
+    <div><strong>Blood Avail.:</strong> Units arranged / X-matched</div>
+    <div><strong>PAC:</strong> ✓ Fit / Unfit / High Risk</div>
+    <div><strong>Consent:</strong> ✓ Signed &amp; Site Marked</div>
+    <div><strong>NPO:</strong> Time of last intake</div>
   </div>
 
   <div class="footer">
-    <span>Prepared by: <i class="ln"></i></span>
-    <span>Checked by: <i class="ln"></i></span>
-    <span>List finalized: <i class="ln short"></i> hrs</span>
+    <span>Prepared by (HO / PGR): <i class="ln" contenteditable="true" spellcheck="false"></i></span>
+    <span>Checked by (SR / Registrar): <i class="ln" contenteditable="true" spellcheck="false"></i></span>
+    <span>List Finalized: <i class="ln short" contenteditable="true" spellcheck="false"></i> hrs</span>
   </div>
 
 </div>
+
+<script>
+  const STORAGE_KEY = 'preop_list_general_surgery_v2';
+  const DEFAULT_ROWS = 12;
+  const STAMPS = ['✓', 'WNL', 'Pending', '✗', ''];
+
+  const tbody = document.getElementById('table-body');
+
+  function createRow(index, rowData = []) {
+    const tr = document.createElement('tr');
+
+    // Column 0: Row Number
+    const tdNum = document.createElement('td');
+    tdNum.className = 'rownum';
+    tdNum.textContent = index;
+    tr.appendChild(tdNum);
+
+    // 15 Editable Columns (indices 0..14 in rowData)
+    // Text-aligned left columns: Name (0), Diagnosis (13), Remarks (14)
+    const leftAlignedCols = [0, 13, 14];
+    // Quick-stampable columns: Labs & Clearance (2..11)
+    const stampableCols = [2, 3, 4, 5, 6, 7, 9, 10, 11];
+
+    for (let c = 0; c < 15; c++) {
+      const td = document.createElement('td');
+      if (leftAlignedCols.includes(c)) td.className = 'txt';
+      td.contentEditable = 'true';
+      td.spellcheck = false;
+      td.textContent = rowData[c] || '';
+
+      if (stampableCols.includes(c)) {
+        td.addEventListener('dblclick', function (e) {
+          e.preventDefault();
+          const cur = this.textContent.trim();
+          const nextIdx = (STAMPS.indexOf(cur) + 1) % STAMPS.length;
+          this.textContent = STAMPS[nextIdx];
+          saveState();
+        });
+      }
+
+      td.addEventListener('input', saveState);
+      tr.appendChild(td);
+    }
+
+    return tr;
+  }
+
+  function renumberRows() {
+    Array.from(tbody.children).forEach((tr, idx) => {
+      tr.firstElementChild.textContent = idx + 1;
+    });
+  }
+
+  function addRow() {
+    if (tbody.children.length >= 20) return;
+    const tr = createRow(tbody.children.length + 1);
+    tbody.appendChild(tr);
+    saveState();
+  }
+
+  function removeRow() {
+    if (tbody.children.length <= 1) return;
+    tbody.removeChild(tbody.lastElementChild);
+    saveState();
+  }
+
+  function clearTable() {
+    if (!confirm('Clear all entered data and reset to a blank 12-row form?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    tbody.innerHTML = '';
+    for (let i = 1; i <= DEFAULT_ROWS; i++) {
+      tbody.appendChild(createRow(i));
+    }
+    document.querySelectorAll('.meta-right .line-box, .footer .ln').forEach(el => el.textContent = '');
+  }
+
+  function saveState() {
+    const rows = Array.from(tbody.children).map(tr =>
+      Array.from(tr.children).slice(1).map(td => td.textContent)
+    );
+    const meta = Array.from(document.querySelectorAll('[contenteditable="true"]'))
+      .filter(el => !el.closest('tbody'))
+      .map(el => el.textContent);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ rows, meta }));
+  }
+
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && Array.isArray(saved.rows) && saved.rows.length > 0) {
+        tbody.innerHTML = '';
+        saved.rows.forEach((rowData, i) => {
+          tbody.appendChild(createRow(i + 1, rowData));
+        });
+        if (Array.isArray(saved.meta)) {
+          const metaEls = Array.from(document.querySelectorAll('[contenteditable="true"]'))
+            .filter(el => !el.closest('tbody'));
+          metaEls.forEach((el, idx) => {
+            if (saved.meta[idx] !== undefined) el.textContent = saved.meta[idx];
+          });
+        }
+        return;
+      }
+    } catch (e) { /* fallback to default */ }
+
+    for (let i = 1; i <= DEFAULT_ROWS; i++) {
+      tbody.appendChild(createRow(i));
+    }
+  }
+
+  // Save header/footer edits automatically
+  document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    if (!el.closest('tbody')) {
+      el.addEventListener('input', saveState);
+    }
+  });
+
+  loadState();
+</script>
 
 </body>
 </html>
